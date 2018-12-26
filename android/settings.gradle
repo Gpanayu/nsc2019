@@ -1,0 +1,3 @@
+rootProject.name = 'nsc2019'
+
+include ':app'
