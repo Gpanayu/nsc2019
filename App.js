@@ -5,20 +5,31 @@
  * @format
  * @flow
  */
-
+ 
 import React, {Component} from 'react';
 import { createStackNavigator,createAppContainer } from "react-navigation";
-import HomeScreen from './src/scenes/HomeScreen'
+import HomeScreen from './src/scenes/HomeScreen';
+import StatScreen from './src/scenes/StatScreen';
+
 
 const App = createStackNavigator({
   Home: {
-      screen: HomeScreen,
-      navigationOptions: {
-        title: "Home",
-        headerStyle: {
-          backgroundColor: '#ff9800'
-        }
-      },
+    screen: HomeScreen,
+    navigationOptions: {
+      title: "Home",
+      headerStyle: {
+        backgroundColor: '#ff9800'
+      }
+    }
+  },
+  Stat: {
+    screen: StatScreen,
+    navigationOptions: {
+      title: "Statistics",
+      headerStyle: {
+        backgroundColor: "#ff9800"
+      }
+    }
   }
 });
 

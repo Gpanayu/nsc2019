@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components/native'
 import { Image } from 'react-native';
 import { Container,Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Badge} from 'native-base';
-import logo from '../asset/pics/logo.png'
+import logo from '../asset/pics/logo.png';
+import {withNavigation} from 'react-navigation';
 
 const StyledImage = styled.Image`
     height: 200;
@@ -20,6 +21,7 @@ const MyCard = styled.View`
 
 class HomeScreen extends React.Component {
     render(){
+        const {navigate} = this.props.navigation;
         return(
             <Container style={{backgroundColor:'#ffeead'}}>
                 <Content style={{margin:10}}>
@@ -38,9 +40,10 @@ class HomeScreen extends React.Component {
                         </CardItem>
                         <CardItem style={{backgroundColor:'#ffcc5c'}}>
                             <Left>
-                                <Badge danger style={{width:100}}>
-                                    <Text>Full</Text>
-                                </Badge>
+                                    <Badge danger style={{width:100}}>
+                                    {/* <Badge danger style={{width:100}} onPress={() => navigate('Stat')}> */}
+                                        <Text onPress={() => navigate('Stat')}>Full</Text>
+                                    </Badge>
                             </Left>
                             <Body style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
                                 <Icon name="md-people" style={{fontSize: 20}}/>
@@ -57,4 +60,4 @@ class HomeScreen extends React.Component {
     }
 }
 
-export default HomeScreen
+export default withNavigation(HomeScreen)
