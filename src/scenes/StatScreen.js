@@ -5,23 +5,52 @@ import { Container,Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left,
 import logo from '../asset/pics/logo.png'
 import {withNavigation} from 'react-navigation';
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
-
-// const StyledImage = styled.Image`
-//     height: 200;
-//     width: null;
-//     flex: 1;
-// `
-// const MyCard = styled.View`
-//     width: 95%;
-//     height: 300px;
-//     border-width: 2px;
-//     border-color: #ffcc5c;
-//     border-radius: 5px;
-// `
+import {TouchableOpacity} from 'react-native';
 
 class StatScreen extends React.Component {
+    constructor(props){
+        super(props);
+        var date = new Date();
+        var hour = date.getHours();
+        if(hour.toString.length == 1){
+            hour = "0" + hour
+        }
+        else{
+            hour = "" + hour
+        }
+        var minute = date.getMinutes();
+        if(minute.toString.length == 1){
+            minute = "0"+ minute
+        }
+        else{
+            minute = "" + minute
+        }
+        var timeNow = hour + minute
+        // Wait for backend server to finish
+
+        // axios.get("http://localhost:500/getFivePoints&time="+timeNow).then((response) => {
+            // console.log(response.data);
+            // this.state = {
+            //     plottedData: response.data
+            // };
+        // });
+        this.state = {
+                plottedData: [
+                    { x: "13.00", y: 2 },
+                    { x: "13.01", y: 3 },
+                    { x: "13.02", y: 5 },
+                    { x: "13.03", y: 4 },
+                    { x: "13.04", y: 7 }
+                ],
+                avg: ((2+3+5+4+7) / 5) | 0
+            };
+        // This is for refreshing the screen to become real-time app
+        // setInterval(() => (
+            //GET data from the backend server
+        //   ), 60000);
+    }
     render(){
-        console.log("hello from the stat sideeeeee");
+        const {navigate} = this.props.navigation;
         return(
             <Container style={{backgroundColor:'#ffeead'}}>
                 <Content style={{margin:10}}>
@@ -44,23 +73,33 @@ class StatScreen extends React.Component {
                             data: { stroke: "#c43a31" },
                             parent: { border: "1px solid #ccc"}
                             }}
-                            data={[
-                            { x: 1, y: 2 },
-                            { x: 2, y: 3 },
-                            { x: 3, y: 5 },
-                            { x: 4, y: 4 },
-                            { x: 5, y: 7 }
-                            ]}
+                            data={this.state.plottedData}
                         />
                         </VictoryChart>
                         </CardItem>
-                        <CardItem style={{backgroundColor:'#ffcc5c'}}>
+                        {
+                            this.state.plottedData.map((item, index) => {
+                                return (
+                                    <TouchableOpacity onPress={() => navigate('Home')}>
+                                        <CardItem style = {{backgroundColor:'#ffcc5c'}} onClick={() => navigate('Home')}>
+                                                <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
+                                                    {/* <Icon name="md-people" style={{fontSize: 20}}/> */}
+                                                    <Text>{item.x}</Text>
+                                                </Left>
+                                                <Right>
+                                                    <Text style={{fontSize: 15}}>{item.y} people</Text>
+                                                </Right>
+                                        </CardItem>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        }
+                        <CardItem style = {{backgroundColor:'#FF8C00'}}>
                             <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
-                                <Icon name="md-people" style={{fontSize: 20}}/>
-                                <Text style={{fontSize: 15}}>30 people</Text>
+                                <Text style={{fontSize: 15}}>Approx.</Text>
                             </Left>
                             <Right>
-                                <Text>11h ago</Text>
+                                <Text>{this.state.avg} people</Text>
                             </Right>
                         </CardItem>
                     </Card>
@@ -70,6 +109,4 @@ class StatScreen extends React.Component {
     }
 }
 
-console.log("before export default statcreen")
-export default StatScreen
-console.log("after export default statcreen")
+export default withNavigation(StatScreen)
