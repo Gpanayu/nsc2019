@@ -59,8 +59,8 @@ class StatScreen extends React.Component {
                             <Left>
                                 <Thumbnail source={require('../asset/pics/logo.png')}/>
                                 <Body>
-                                    <Text>Statistics</Text>
-                                    <Text note>โรงอาหารวิศวะจุฬา</Text>
+                                    <Text>Icanteen</Text>
+                                    <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
                                 </Body>
                             </Left>
                         </CardItem>

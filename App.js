@@ -10,6 +10,7 @@ import React, {Component} from 'react';
 import { createStackNavigator,createAppContainer } from "react-navigation";
 import HomeScreen from './src/scenes/HomeScreen';
 import StatScreen from './src/scenes/StatScreen';
+import HeatMapScreen from './src/scenes/HeatMapScreen';
 
 
 const App = createStackNavigator({
@@ -28,6 +29,15 @@ const App = createStackNavigator({
       title: "Statistics",
       headerStyle: {
         backgroundColor: "#ff9800"
+      }
+    }
+  },
+  HeatMap: {
+    screen: HeatMapScreen,
+    navigationOptions: {
+      title: "Heat Map",
+      headerStyle: {
+        backgroundColor: "ff9800"
       }
     }
   }

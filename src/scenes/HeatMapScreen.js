@@ -19,7 +19,7 @@ const MyCard = styled.View`
 `
 
 
-class HomeScreen extends React.Component {
+class HeatMapScreen extends React.Component {
     render(){
         const {navigate} = this.props.navigation;
         return(
@@ -60,4 +60,4 @@ class HomeScreen extends React.Component {
     }
 }
 
-export default withNavigation(HomeScreen)
+export default withNavigation(HeatMapScreen)
