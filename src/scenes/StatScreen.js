@@ -80,8 +80,8 @@ class StatScreen extends React.Component {
                         {
                             this.state.plottedData.map((item, index) => {
                                 return (
-                                    <TouchableOpacity onPress={() => navigate('Home')}>
-                                        <CardItem style = {{backgroundColor:'#ffcc5c'}} onClick={() => navigate('Home')}>
+                                    <TouchableOpacity onPress={() => navigate('HeatMap', {time: item.x, amount: item.y})}>
+                                        <CardItem style = {{backgroundColor:'#ffcc5c'}}>
                                                 <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
                                                     {/* <Icon name="md-people" style={{fontSize: 20}}/> */}
                                                     <Text>{item.x}</Text>

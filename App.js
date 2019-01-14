@@ -37,7 +37,7 @@ const App = createStackNavigator({
     navigationOptions: {
       title: "Heat Map",
       headerStyle: {
-        backgroundColor: "ff9800"
+        backgroundColor: "#ff9800"
       }
     }
   }

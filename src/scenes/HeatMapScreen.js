@@ -4,6 +4,7 @@ import { Image } from 'react-native';
 import { Container,Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Badge} from 'native-base';
 import logo from '../asset/pics/logo.png';
 import {withNavigation} from 'react-navigation';
+import { View } from 'react-native'
 
 const StyledImage = styled.Image`
     height: 200;
@@ -20,6 +21,14 @@ const MyCard = styled.View`
 
 
 class HeatMapScreen extends React.Component {
+    constructor(props){
+        super(props);
+        time = this.props.navigation.state.params.time;
+        time = time.split(".").join("")+".jpg";
+        this.state = {
+            url: "http://localhost:5000/getHeatMap?time="+time
+        };
+    }
     render(){
         const {navigate} = this.props.navigation;
         return(
@@ -36,21 +45,16 @@ class HeatMapScreen extends React.Component {
                             </Left>
                         </CardItem>
                         <CardItem cardBody>
-                            <StyledImage source={require('../asset/pics/test_img.jpg')}/>
+                            <StyledImage source={{uri: this.state.url}}/>
                         </CardItem>
                         <CardItem style={{backgroundColor:'#ffcc5c'}}>
                             <Left>
-                                    <Badge danger style={{width:100}}>
-                                    {/* <Badge danger style={{width:100}} onPress={() => navigate('Stat')}> */}
-                                        <Text onPress={() => navigate('Stat')}>Full</Text>
-                                    </Badge>
+                                    <Body style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
+                                        <Text>{this.props.navigation.state.params.time}</Text>
+                                    </Body>
                             </Left>
-                            <Body style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
-                                <Icon name="md-people" style={{fontSize: 20}}/>
-                                <Text style={{fontSize: 15}}>30 people</Text>
-                            </Body>
                             <Right>
-                                <Text>11h ago</Text>
+                                <Text style={{fontSize: 15}}>{this.props.navigation.state.params.amount} people</Text> 
                             </Right>
                         </CardItem>
                     </Card>
