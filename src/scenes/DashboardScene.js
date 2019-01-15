@@ -132,7 +132,7 @@ class DashboardScreen extends React.Component {
                 </Row>
                 <Row>
                     <UpdateBar>
-                        <RobotoText>Last Updated:</RobotoText>
+                        <RobotoText>Last Update:</RobotoText>
                         <RobotoText>16/1/1</RobotoText>
                     </UpdateBar>
                 </Row>
