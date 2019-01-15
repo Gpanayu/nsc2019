@@ -6,51 +6,75 @@ import logo from '../asset/pics/logo.png'
 import {withNavigation} from 'react-navigation';
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import {TouchableOpacity} from 'react-native';
+import axios from 'axios';
 
 class StatScreen extends React.Component {
     constructor(props){
         super(props);
-        var date = new Date();
-        var hour = date.getHours();
-        if(hour.toString.length == 1){
-            hour = "0" + hour
-        }
-        else{
-            hour = "" + hour
-        }
-        var minute = date.getMinutes();
-        if(minute.toString.length == 1){
-            minute = "0"+ minute
-        }
-        else{
-            minute = "" + minute
-        }
-        var timeNow = hour + minute
-        // Wait for backend server to finish
-
-        // axios.get("http://localhost:500/getFivePoints&time="+timeNow).then((response) => {
-            // console.log(response.data);
-            // this.state = {
-            //     plottedData: response.data
-            // };
-        // });
         this.state = {
-                plottedData: [
-                    { x: "13.00", y: 2 },
-                    { x: "13.01", y: 3 },
-                    { x: "13.02", y: 5 },
-                    { x: "13.03", y: 4 },
-                    { x: "13.04", y: 7 }
-                ],
-                avg: ((2+3+5+4+7) / 5) | 0
-            };
+            plottedData: [],
+            avg: 0
+        };
         // This is for refreshing the screen to become real-time app
         // setInterval(() => (
             //GET data from the backend server
         //   ), 60000);
     }
+    componentWillMount(){
+        var date = new Date();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        if (hour < 11 || (hour == 11 && minute <= 5)){
+            hour = 11;
+            minute = 0;
+        }
+        else if(minute < 5){
+            hour = hour - 1;
+            minute = 60 - (5 - minute);
+        }
+        else{
+            minute = minute - 5;
+        }
+        hour = "" + hour;
+        minute = "" + minute;
+        if(hour.length == 1){
+            hour = "0" + hour;
+        }
+        if(minute.length == 1){
+            minute = "0"+ minute;
+        }
+        var timeNow = hour + minute;
+        axios.get("http://localhost:5000/getFivePoints?startTime="+timeNow+".jpg").then((response) => {
+            console.log(response.data);
+            let tmpPlottedData = [];
+            let tmpAvg = 0;
+            for(let key in response.data){
+                let obj = {};
+                obj.x = key.substring(0, 2)+"."+key.substring(2, 4);
+                obj.y = response.data[key];
+                tmpPlottedData.push(obj);
+                tmpAvg += obj.y;
+                console.log("let's see obj");
+                console.log(obj);
+                console.log("let's see obj");
+            };
+            tmpAvg = (tmpAvg / 5) | 0;
+            console.log("let's see the plottedDATA");
+            console.log(JSON.stringify(tmpPlottedData));
+            console.log("let's see the plottedDATA");
+            this.setState({plottedData: tmpPlottedData});
+            this.setState({avg: tmpAvg});
+        });
+    }
     render(){
         const {navigate} = this.props.navigation;
+        if(this.state.plottedData.length == 0){
+            return (
+                <Body style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                    <Text style={{fontSize: 20}}>Please wait a moment...</Text>
+                </Body>
+            );
+        }
         return(
             <Container style={{backgroundColor:'#ffeead'}}>
                 <Content style={{margin:10}}>
