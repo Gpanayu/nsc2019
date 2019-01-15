@@ -10,10 +10,17 @@ import React, {Component} from 'react';
 import { createStackNavigator,createAppContainer } from "react-navigation";
 import HomeScreen from './src/scenes/HomeScreen';
 import StatScreen from './src/scenes/StatScreen';
+import DashboardScreen from './src/scenes/DashboardScene';
 import HeatMapScreen from './src/scenes/HeatMapScreen';
 
 
 const App = createStackNavigator({
+  Dashboard: {
+    screen: DashboardScreen,
+    navigationOptions: {
+      title: "Dashboard",
+    }
+  }
   Home: {
     screen: HomeScreen,
     navigationOptions: {
