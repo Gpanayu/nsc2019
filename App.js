@@ -20,7 +20,7 @@ const App = createStackNavigator({
     navigationOptions: {
       title: "Dashboard",
     }
-  }
+  },
   Home: {
     screen: HomeScreen,
     navigationOptions: {
