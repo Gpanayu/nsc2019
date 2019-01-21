@@ -162,13 +162,8 @@ class DashboardScreen extends React.Component {
                 </Row>
                 <Row>
                     <UpdateBar>
-<<<<<<< Updated upstream
-                        <RobotoText>Last Update:</RobotoText>
-                        <RobotoText>16/1/1</RobotoText>
-=======
                         <RobotoText>Last Updated:</RobotoText>
                         <RobotoText>{this.updatedTime}</RobotoText>
->>>>>>> Stashed changes
                     </UpdateBar>
                 </Row>
             </Container>
