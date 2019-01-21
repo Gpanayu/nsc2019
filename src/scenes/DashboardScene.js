@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { vw, vh } from 'react-native-expo-viewport-units';
-import { Text,Icon,Segment,Button } from 'native-base';
+import { Text,Icon,Segment,Button,Thumbnail } from 'native-base';
 import { View,Image } from 'react-native'
 import { withNavigation } from 'react-navigation';
+import axios from 'axios'
 
 const Background = styled.View`
     position: absolute;
@@ -68,27 +69,57 @@ const ButtonGroup = styled.View`
     justify-content: center;
     flex-direction: row;
 `
+const PlaceBar = styled.View`
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 3;
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+`
 // const ImageCard = styled.View``
 class DashboardScreen extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             showOrdinary: true,
-            ordinaryURL: '../asset/pics/test_img.jpg',
-            heatmapURL: '../asset/pics/test_heat.jpg',
-            url: '../asset/pics/test_img.jpg'
         }
+        date = new Date()
+        query = "" + date.getHours() + date.getMinutes() + ".jpg";
+        this.updatedTime = date.getHours() + ":" + date.getMinutes()
+        this.oriImg = `http://localhost:5000/getNowPicture?time=${query}`
+        this.heatImg = `http://localhost:5000/getHeatMap?time=${query}`
+        // date = new Date()
+        // query = "" + date.getHours() + date.getMinutes() + ".jpg";
+
     }
     async componentWillMount() {
         await Expo.Font.loadAsync({
           'Roboto': require('native-base/Fonts/Roboto.ttf'),
           'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         });
+        // const oriImg = await axios.get(`localhost:5000:/getNowPicture?time=${query}`).data
     }
     render(){
+        const {navigate} = this.props.navigation;
         return (
             <Container>
                 <Background/>
+                <Row>
+                    <PlaceBar>
+                        <Thumbnail source={require('../asset/pics/logo.png')}/>
+                        <View style={{width:10}}/>
+                        <View>
+                            <RobotoText>Icanteen</RobotoText>
+                            <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
+                        </View>
+                        <Button style={{marginLeft:'auto'}} transparent dark>
+                            <Icon style={{fontSize:30}} onPress={()=>navigate('Stat')} name='graph-trend' type='Foundation'/>
+                        </Button>
+                    </PlaceBar>
+                </Row>
                 <Row>
                     <Card>
                         <RobotoText>People Count</RobotoText>
@@ -110,7 +141,7 @@ class DashboardScreen extends React.Component {
                 <Row>
                     <SampleCard>
                         
-                        <StyledImage source={require('../asset/pics/test_img.jpg')}/>
+                        <StyledImage source={{uri: this.state.showOrdinary ? this.oriImg : this.heatImg}}/>
                         <ButtonGroup>
                             <Segment>
                                 <Button 
@@ -126,14 +157,18 @@ class DashboardScreen extends React.Component {
                                     <Text>Heatmap</Text>
                                 </Button>
                             </Segment>
-
                         </ButtonGroup>
                     </SampleCard>
                 </Row>
                 <Row>
                     <UpdateBar>
+<<<<<<< Updated upstream
                         <RobotoText>Last Update:</RobotoText>
                         <RobotoText>16/1/1</RobotoText>
+=======
+                        <RobotoText>Last Updated:</RobotoText>
+                        <RobotoText>{this.updatedTime}</RobotoText>
+>>>>>>> Stashed changes
                     </UpdateBar>
                 </Row>
             </Container>
