@@ -4,6 +4,7 @@ import { vw, vh } from 'react-native-expo-viewport-units';
 import { Text,Icon,Segment,Button,Thumbnail } from 'native-base';
 import { View,Image } from 'react-native'
 import { withNavigation } from 'react-navigation';
+import Orientation from 'react-native-orientation';
 import axios from 'axios'
 
 const Background = styled.View`
@@ -14,7 +15,6 @@ const Background = styled.View`
 `
 const Container = styled.View`
     display: flex;
-    background-color: #eeeeee;
     padding: 15px;
 `
 const Row = styled.View`
@@ -85,16 +85,59 @@ class DashboardScreen extends React.Component {
         super(props)
         this.state = {
             showOrdinary: true,
+            countPeople: '',
+            status: ''
         }
-        date = new Date()
-        query = "" + date.getHours() + date.getMinutes() + ".jpg";
+        var date = new Date();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        if (hour < 11 || (hour == 11 && minute <= 5)){
+            hour = 11;
+            minute = 0;
+        }
+        else if(minute < 5){
+            hour = hour - 1;
+            minute = 60 - (5 - minute);
+        }
+        else{
+            minute = minute - 5;
+        }
+        hour = "" + hour;
+        minute = "" + minute;
+        if(hour.length == 1){
+            hour = "0" + hour;
+        }
+        if(minute.length == 1){
+            minute = "0"+ minute;
+        }
+        const query = "" + hour + minute + ".jpg";
+        // const query = '1230.jpg'
+        
+        this.date = date
         this.updatedTime = date.getHours() + ":" + date.getMinutes()
+
         this.oriImg = `http://localhost:5000/getNowPicture?time=${query}`
         this.heatImg = `http://localhost:5000/getHeatMap?time=${query}`
+        // this.countPeople = axios.get(`http://localhost:5000/getFivePoints?startTime=${query}`).data
+        axios.get(`http://localhost:5000/getFivePoints?startTime=${query}`).then((res)=>{
+            // const query = "" + date.getHours() + date.getMinutes() + ".jpg";
+            console.log('query',query)
+            console.log('res',query,res)
+            // console.log('eiei',{countPeople : res.data[query][0] , status : res.data[query][1]})
+            // const query = '1230.jpg'
+            this.setState({countPeople : res.data[query][0] , status : res.data[query][1]})
+            // console.log('test',res.data[query])
+        })
+        // console.log('test',this.countPeople)
         // date = new Date()
         // query = "" + date.getHours() + date.getMinutes() + ".jpg";
 
     }
+
+    componentDidMount() {
+        Orientation.addOrientationListener(() => Orientation.lockToPortrait());
+    }
+
     async componentWillMount() {
         await Expo.Font.loadAsync({
           'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -126,14 +169,14 @@ class DashboardScreen extends React.Component {
                         <StatusView>
                             <Icon name='people-outline' type='MaterialIcons'/>
                             <View style={{width:10,marginTop:'auto'}}/>
-                            <RobotoText style={{fontSize:40}}>300</RobotoText>
+                            <RobotoText style={{fontSize:40}}>{this.state.countPeople}</RobotoText>
                         </StatusView>
                     </Card>
                     <Card>
                         <RobotoText>Status</RobotoText>
                         <StatusView>
-                            <RobotoText style={{fontSize:40,color:'red'}}>
-                                Full
+                            <RobotoText style={{fontSize:30}}>
+                                {this.state.status}
                             </RobotoText>
                         </StatusView>
                     </Card>
@@ -162,13 +205,8 @@ class DashboardScreen extends React.Component {
                 </Row>
                 <Row>
                     <UpdateBar>
-<<<<<<< Updated upstream
                         <RobotoText>Last Update:</RobotoText>
-                        <RobotoText>16/1/1</RobotoText>
-=======
-                        <RobotoText>Last Updated:</RobotoText>
-                        <RobotoText>{this.updatedTime}</RobotoText>
->>>>>>> Stashed changes
+                        <RobotoText>{this.date.toLocaleTimeString()}</RobotoText>
                     </UpdateBar>
                 </Row>
             </Container>
