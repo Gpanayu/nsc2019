@@ -19,7 +19,7 @@ const App = createStackNavigator({
     screen: DashboardScreen,
     navigationOptions: {
       title: "Dashboard",
-    }
+    },
   },
   Home: {
     screen: HomeScreen,
@@ -34,20 +34,14 @@ const App = createStackNavigator({
     screen: StatScreen,
     navigationOptions: {
       title: "Statistics",
-      headerStyle: {
-        backgroundColor: "#ff9800"
-      }
     }
   },
   HeatMap: {
     screen: HeatMapScreen,
     navigationOptions: {
-      title: "Heat Map",
-      headerStyle: {
-        backgroundColor: "#ff9800"
-      }
+      title: "Sample",
     }
-  }
+  },
 });
 
 export default createAppContainer(App)
