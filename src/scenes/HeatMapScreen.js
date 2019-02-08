@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { Image } from 'react-native';
-import { Container,Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Badge} from 'native-base';
+import { Container,Content, Card, CardItem, Thumbnail, Text, Segment, Left, Body, Right, Button} from 'native-base';
 import logo from '../asset/pics/logo.png';
 import {withNavigation} from 'react-navigation';
 import { View } from 'react-native'
@@ -24,18 +24,20 @@ class HeatMapScreen extends React.Component {
     constructor(props){
         super(props);
         time = this.props.navigation.state.params.time;
-        time = time.split(".").join("")+".jpg";
+        const query = time.split(".").join("")+".jpg";
         this.state = {
-            url: "http://localhost:5000/getHeatMap?time="+time
+            showOrdinary: true,
         };
+        this.oriImg = `http://localhost:5000/getNowPicture?time=${query}`
+        this.heatImg = `http://localhost:5000/getHeatMap?time=${query}`
     }
     render(){
         const {navigate} = this.props.navigation;
         return(
-            <Container style={{backgroundColor:'#ffeead'}}>
+            <Container style={{backgroundColor:'#eeeeee'}}>
                 <Content style={{margin:10}}>
                     <Card>
-                        <CardItem style={{backgroundColor:'#ffcc5c'}}>
+                        <CardItem style={{backgroundColor:'white'}}>
                             <Left>
                                 <Thumbnail source={require('../asset/pics/logo.png')}/>
                                 <Body>
@@ -45,9 +47,25 @@ class HeatMapScreen extends React.Component {
                             </Left>
                         </CardItem>
                         <CardItem cardBody>
-                            <StyledImage source={{uri: this.state.url}}/>
+                            <StyledImage source={{uri: this.state.showOrdinary ? this.oriImg : this.heatImg}}/>
                         </CardItem>
-                        <CardItem style={{backgroundColor:'#ffcc5c'}}>
+                        <CardItem style={{flex:1,justifyContent:'center'}}>
+                            <Segment>
+                                <Button 
+                                    first active={this.state.showOrdinary} 
+                                    onPress={()=>{this.setState({showOrdinary:true})}}
+                                >
+                                    <Text>Orinary</Text>
+                                </Button>
+                                <Button 
+                                    last active={!this.state.showOrdinary} 
+                                    onPress={()=>{this.setState({showOrdinary:false})}}
+                                >
+                                    <Text>Heatmap</Text>
+                                </Button>
+                            </Segment>
+                        </CardItem>
+                        <CardItem style={{backgroundColor:'white'}}>
                             <Left>
                                     <Body style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
                                         <Text>{this.props.navigation.state.params.time}</Text>

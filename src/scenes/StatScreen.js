@@ -44,6 +44,7 @@ class StatScreen extends React.Component {
             minute = "0"+ minute;
         }
         var timeNow = hour + minute;
+        // var timeNow = '1230'
         axios.get("http://localhost:5000/getFivePoints?startTime="+timeNow+".jpg").then((response) => {
             console.log(response.data);
             let tmpPlottedData = [];
@@ -51,7 +52,7 @@ class StatScreen extends React.Component {
             for(let key in response.data){
                 let obj = {};
                 obj.x = key.substring(0, 2)+"."+key.substring(2, 4);
-                obj.y = response.data[key];
+                obj.y = response.data[key][0];
                 tmpPlottedData.push(obj);
                 tmpAvg += obj.y;
                 console.log("let's see obj");
@@ -76,10 +77,10 @@ class StatScreen extends React.Component {
             );
         }
         return(
-            <Container style={{backgroundColor:'#ffeead'}}>
+            <Container style={{backgroundColor:'#eeeeee'}}>
                 <Content style={{margin:10}}>
                     <Card>
-                        <CardItem style={{backgroundColor:'#ffcc5c'}}>
+                        <CardItem style={{backgroundColor:'#e0e0e0'}}>
                             <Left>
                                 <Thumbnail source={require('../asset/pics/logo.png')}/>
                                 <Body>
@@ -105,7 +106,7 @@ class StatScreen extends React.Component {
                             this.state.plottedData.map((item, index) => {
                                 return (
                                     <TouchableOpacity onPress={() => navigate('HeatMap', {time: item.x, amount: item.y})}>
-                                        <CardItem style = {{backgroundColor:'#ffcc5c'}}>
+                                        <CardItem style = {{backgroundColor:'#e0e0e0'}}>
                                                 <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
                                                     {/* <Icon name="md-people" style={{fontSize: 20}}/> */}
                                                     <Text>{item.x}</Text>
@@ -118,7 +119,7 @@ class StatScreen extends React.Component {
                                 )
                             })
                         }
-                        <CardItem style = {{backgroundColor:'#FF8C00'}}>
+                        <CardItem style = {{backgroundColor:'#9e9e9e'}}>
                             <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
                                 <Text style={{fontSize: 15}}>Approx.</Text>
                             </Left>
