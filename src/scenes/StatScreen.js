@@ -18,6 +18,10 @@ class StatScreen extends React.Component {
         };
     }
     componentWillMount(){
+        
+    }
+    componentDidMount(){
+        console.log("edited  naja awfjeijfejifejwaipfjeoe 2019")
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
@@ -44,7 +48,6 @@ class StatScreen extends React.Component {
             minute = "0"+ minute;
         }
         var timeNow = hour + minute;
-        // var timeNow = '1230'
         axios.get(`http://${url}/getFivePoints?startTime=`+timeNow+".jpg").then((response) => {
             let tmpPlottedData = [];
             let tmpAvg = 0;
