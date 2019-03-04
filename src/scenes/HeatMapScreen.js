@@ -19,7 +19,7 @@ const MyCard = styled.View`
     border-radius: 5px;
 `
 
-
+const url = "localhost:5000";
 class HeatMapScreen extends React.Component {
     constructor(props){
         super(props);
@@ -28,8 +28,8 @@ class HeatMapScreen extends React.Component {
         this.state = {
             showOrdinary: true,
         };
-        this.oriImg = `http://localhost:5000/getNowPicture?time=${query}`
-        this.heatImg = `http://localhost:5000/getHeatMap?time=${query}`
+        this.oriImg = `http://${url}/getNowPicture?time=${query}`
+        this.heatImg = `http://${url}/getHeatMap?time=${query}`
     }
     render(){
         const {navigate} = this.props.navigation;

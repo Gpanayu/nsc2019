@@ -8,6 +8,7 @@ import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import {TouchableOpacity} from 'react-native';
 import axios from 'axios';
 
+const url = "localhost:5000";
 class StatScreen extends React.Component {
     constructor(props){
         super(props);
@@ -15,16 +16,15 @@ class StatScreen extends React.Component {
             plottedData: [],
             avg: 0
         };
-        // This is for refreshing the screen to become real-time app
-        // setInterval(() => (
-            //GET data from the backend server
-        //   ), 60000);
     }
     componentWillMount(){
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
-        if (hour < 11 || (hour == 11 && minute <= 5)){
+        if (hour <= 11 && minute > 5){
+            hour = 11;
+        }
+        else if (hour <= 11  && minute <= 5){
             hour = 11;
             minute = 0;
         }
@@ -45,8 +45,7 @@ class StatScreen extends React.Component {
         }
         var timeNow = hour + minute;
         // var timeNow = '1230'
-        axios.get("http://localhost:5000/getFivePoints?startTime="+timeNow+".jpg").then((response) => {
-            console.log(response.data);
+        axios.get(`http://${url}/getFivePoints?startTime=`+timeNow+".jpg").then((response) => {
             let tmpPlottedData = [];
             let tmpAvg = 0;
             for(let key in response.data){
@@ -55,14 +54,8 @@ class StatScreen extends React.Component {
                 obj.y = response.data[key][0];
                 tmpPlottedData.push(obj);
                 tmpAvg += obj.y;
-                console.log("let's see obj");
-                console.log(obj);
-                console.log("let's see obj");
             };
             tmpAvg = (tmpAvg / 5) | 0;
-            console.log("let's see the plottedDATA");
-            console.log(JSON.stringify(tmpPlottedData));
-            console.log("let's see the plottedDATA");
             this.setState({plottedData: tmpPlottedData});
             this.setState({avg: tmpAvg});
         });

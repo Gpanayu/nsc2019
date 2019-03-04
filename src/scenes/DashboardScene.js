@@ -5,7 +5,7 @@ import { Text,Icon,Segment,Button,Thumbnail } from 'native-base';
 import { View,Image } from 'react-native'
 import { withNavigation } from 'react-navigation';
 import Orientation from 'react-native-orientation';
-import axios from 'axios'
+import axios from 'axios';
 
 const Background = styled.View`
     position: absolute;
@@ -79,7 +79,7 @@ const PlaceBar = styled.View`
     width: 100%;
     padding: 10px;
 `
-// const ImageCard = styled.View``
+const url = "localhost:5000";
 class DashboardScreen extends React.Component {
     constructor(props){
         super(props)
@@ -91,7 +91,10 @@ class DashboardScreen extends React.Component {
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
-        if (hour < 11 || (hour == 11 && minute <= 5)){
+        if (hour <= 11 && minute > 5){
+            hour = 11;
+        }
+        else if (hour <= 11  && minute <= 5){
             hour = 11;
             minute = 0;
         }
@@ -111,29 +114,17 @@ class DashboardScreen extends React.Component {
             minute = "0"+ minute;
         }
         const query = "" + hour + minute + ".jpg";
-        // const query = '1230.jpg'
         
         this.date = date
         this.updatedTime = date.getHours() + ":" + date.getMinutes()
 
-        this.oriImg = `http://localhost:5000/getNowPicture?time=${query}`
-        this.heatImg = `http://localhost:5000/getHeatMap?time=${query}`
-        // this.countPeople = axios.get(`http://localhost:5000/getFivePoints?startTime=${query}`).data
-        console.log("test mai naja");
-        axios.get(`http://localhost:5000/getFivePoints?startTime=${query}`).then((res)=>{
-            console.log("test mai naja innnnn");
-            // const query = "" + date.getHours() + date.getMinutes() + ".jpg";
-            console.log('query',query)
-            console.log('res',query,res)
-            // console.log('eiei',{countPeople : res.data[query][0] , status : res.data[query][1]})
-            // const query = '1230.jpg'
-            this.setState({countPeople : res.data[query][0] , status : res.data[query][1]})
-            // console.log('test',res.data[query])
-        })
-        // console.log('test',this.countPeople)
-        // date = new Date()
-        // query = "" + date.getHours() + date.getMinutes() + ".jpg";
+        this.oriImg = `http://${url}/getNowPicture?time=${query}`
+        this.heatImg = `http://${url}/getHeatMap?time=${query}`
 
+        axios.get(`http://${url}/getFivePoints?startTime=${query}`).then((res)=>{
+            keysObj = Object.keys(res.data);
+            this.setState({countPeople : res.data[keysObj[keysObj.length-1]][0] , status : res.data[keysObj[keysObj.length-1]][1]})
+        })
     }
 
     componentDidMount() {
@@ -141,11 +132,7 @@ class DashboardScreen extends React.Component {
     }
 
     async componentWillMount() {
-        await Expo.Font.loadAsync({
-          'Roboto': require('native-base/Fonts/Roboto.ttf'),
-          'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-        });
-        // const oriImg = await axios.get(`localhost:5000:/getNowPicture?time=${query}`).data
+        
     }
     render(){
         const {navigate} = this.props.navigation;
