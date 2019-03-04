@@ -21,7 +21,6 @@ class StatScreen extends React.Component {
         
     }
     componentDidMount(){
-        console.log("edited  naja awfjeijfejifejwaipfjeoe 2019")
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();

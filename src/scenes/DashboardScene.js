@@ -117,6 +117,38 @@ class DashboardScreen extends React.Component {
         
         this.date = date
         this.updatedTime = date.getHours() + ":" + date.getMinutes()
+    }
+
+    componentDidMount() {
+        var date = new Date();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        if (hour <= 11 && minute > 5){
+            hour = 11;
+        }
+        else if (hour <= 11  && minute <= 5){
+            hour = 11;
+            minute = 0;
+        }
+        else if(minute < 5){
+            hour = hour - 1;
+            minute = 60 - (5 - minute);
+        }
+        else{
+            minute = minute - 5;
+        }
+        hour = "" + hour;
+        minute = "" + minute;
+        if(hour.length == 1){
+            hour = "0" + hour;
+        }
+        if(minute.length == 1){
+            minute = "0"+ minute;
+        }
+        const query = "" + hour + minute + ".jpg";
+        
+        this.date = date
+        this.updatedTime = date.getHours() + ":" + date.getMinutes()
 
         this.oriImg = `http://${url}/getNowPicture?time=${query}`
         this.heatImg = `http://${url}/getHeatMap?time=${query}`
@@ -124,10 +156,7 @@ class DashboardScreen extends React.Component {
         axios.get(`http://${url}/getFivePoints?startTime=${query}`).then((res)=>{
             keysObj = Object.keys(res.data);
             this.setState({countPeople : res.data[keysObj[keysObj.length-1]][0] , status : res.data[keysObj[keysObj.length-1]][1]})
-        })
-    }
-
-    componentDidMount() {
+        });
         Orientation.addOrientationListener(() => Orientation.lockToPortrait());
     }
 
