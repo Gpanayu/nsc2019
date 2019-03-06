@@ -91,20 +91,21 @@ class DashboardScreen extends React.Component {
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
-        if (hour <= 11 && minute > 5){
-            hour = 11;
-        }
-        else if (hour <= 11  && minute <= 5){
-            hour = 11;
-            minute = 0;
-        }
-        else if(minute < 5){
-            hour = hour - 1;
-            minute = 60 - (5 - minute);
-        }
-        else{
-            minute = minute - 5;
-        }
+        // For mocking purpose
+        // if (hour <= 11 && minute > 5){
+        //     hour = 11;
+        // }
+        // else if (hour <= 11  && minute <= 5){
+        //     hour = 11;
+        //     minute = 0;
+        // }
+        // else if(minute < 5){
+        //     hour = hour - 1;
+        //     minute = 60 - (5 - minute);
+        // }
+        // else{
+        //     minute = minute - 5;
+        // }
         hour = "" + hour;
         minute = "" + minute;
         if(hour.length == 1){
@@ -123,20 +124,21 @@ class DashboardScreen extends React.Component {
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
-        if (hour <= 11 && minute > 5){
-            hour = 11;
-        }
-        else if (hour <= 11  && minute <= 5){
-            hour = 11;
-            minute = 0;
-        }
-        else if(minute < 5){
-            hour = hour - 1;
-            minute = 60 - (5 - minute);
-        }
-        else{
-            minute = minute - 5;
-        }
+        // For mocking purpose
+        // if (hour <= 11 && minute > 5){
+        //     hour = 11;
+        // }
+        // else if (hour <= 11  && minute <= 5){
+        //     hour = 11;
+        //     minute = 0;
+        // }
+        // else if(minute < 5){
+        //     hour = hour - 1;
+        //     minute = 60 - (5 - minute);
+        // }
+        // else{
+        //     minute = minute - 5;
+        // }
         hour = "" + hour;
         minute = "" + minute;
         if(hour.length == 1){
