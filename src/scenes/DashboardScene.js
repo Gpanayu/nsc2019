@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { vw, vh } from 'react-native-expo-viewport-units';
-import { Text,Icon,Segment,Button,Thumbnail } from 'native-base';
+import { Text,Icon,Segment,Button,Thumbnail,Picker,Form, Item } from 'native-base';
 import { View,Image } from 'react-native'
 import { withNavigation } from 'react-navigation';
 import Orientation from 'react-native-orientation';
@@ -79,12 +79,16 @@ const PlaceBar = styled.View`
     width: 100%;
     padding: 10px;
 `
-const url = "35.187.253.190:5000";
+//const url = "35.187.253.190:5000";
+//const url_2 = "34.73.7.125:5000";
 class DashboardScreen extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             showOrdinary: true,
+            place: 'Icanteen',
+            place_desc: 'โรงอาหารวิศวฯจุฬาฯ',
+            url: "35.187.253.190:5000",
             countPeople: '',
             status: '',
             oriImg: '',
@@ -92,7 +96,6 @@ class DashboardScreen extends React.Component {
             updatedTime: '',
             date: ''
         }
-        
     }
     async update(){
         var date = new Date();
@@ -108,60 +111,36 @@ class DashboardScreen extends React.Component {
         }
         const query = await "" + hour + minute + ".jpg";
         await this.setState({
-            oriImg : `http://${url}/getNowPicture?time=${query}`,
-            heatImg : `http://${url}/getHeatMap?time=${query}`,
+            oriImg : `http://${this.state.url}/getNowPicture?time=${query}`,
+            heatImg : `http://${this.state.url}/getHeatMap?time=${query}`,
             updatedTime : date.toLocaleTimeString()
         })
-        await axios.get(`http://${url}/getHeadcounts?uploaded_filename=${query}`).then((res)=>{
+        await axios.get(`http://${this.state.url}/getHeadcounts?uploaded_filename=${query}`).then((res)=>{
             this.setState({countPeople : res.data['count'] , status : res.data['density']})
         });
     }
     componentDidMount() {
         this.update()
-        // var date = new Date();
-        // var hour = date.getHours();
-        // var minute = date.getMinutes();
-        // For mocking purpose
-        // if (hour <= 11 && minute > 5){
-        //     hour = 11;
-        // }
-        // else if (hour <= 11  && minute <= 5){
-        //     hour = 11;
-        //     minute = 0;
-        // }
-        // else if(minute < 5){
-        //     hour = hour - 1;
-        //     minute = 60 - (5 - minute);
-        // }
-        // else{
-        //     minute = minute - 5;
-        // }
-        // hour = "" + hour;
-        // minute = "" + minute;
-        // if(hour.length == 1){
-        //     hour = "0" + hour;
-        // }
-        // if(minute.length == 1){
-        //     minute = "0"+ minute;
-        // }
-        // const query = "" + hour + minute + ".jpg";
-        
-        // this.date = date
-        // this.updatedTime = date.getHours() + ":" + date.getMinutes()
-
-        // this.oriImg = `http://${url}/getNowPicture?time=${query}`
-        // this.heatImg = `http://${url}/getHeatMap?time=${query}`
-
-        // axios.get(`http://${url}/getFivePoints?startTime=${query}`).then((res)=>{
-        //     keysObj = Object.keys(res.data);
-        //     this.setState({countPeople : res.data[keysObj[keysObj.length-1]][0] , status : res.data[keysObj[keysObj.length-1]][1]})
-        // });
         Orientation.addOrientationListener(() => Orientation.lockToPortrait());
     }
 
-    async componentWillMount() {
-        
+    onPlaceChange(value: string) {
+        if (value == 'Icanteen'){
+            this.setState({
+                place: value,
+                url: "35.187.253.190:5000"
+            });
+            this.update()
+        }
+        if (value == 'Fashion Island'){
+            this.setState({
+                place: value,
+                url: "34.73.7.125:5000"
+            });
+            this.update()
+        }
     }
+
     render(){
         const {navigate} = this.props.navigation;
         return (
@@ -172,8 +151,23 @@ class DashboardScreen extends React.Component {
                         <Thumbnail source={require('../asset/pics/logo.png')}/>
                         <View style={{width:10}}/>
                         <View>
-                            <RobotoText>Icanteen</RobotoText>
-                            <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
+                            <Form>
+                                <Item picker>
+                                <Picker
+                                    mode="dropdown"
+                                    // iosIcon={<Icon name="arrow-down" />}
+                                    style={{ minWidth:120 }}
+                                    placeholder="Select your Place"
+                                    placeholderStyle={{ color: "#000000" }}
+                                    placeholderIconColor="#000000"
+                                    selectedValue={this.state.place}
+                                    onValueChange={this.onPlaceChange.bind(this)}
+                                >
+                                    <Picker.Item label="Icanteen" value="Icanteen" />
+                                    <Picker.Item label="Fashion Island" value="Fashion Island" />
+                                </Picker>
+                                </Item>
+                            </Form>
                         </View>
                         <Button style={{marginLeft:'auto'}} transparent dark>
                             <Icon style={{fontSize:30}} onPress={()=>this.update()} name='refresh' type='Foundation'/>
@@ -186,7 +180,7 @@ class DashboardScreen extends React.Component {
                         <RobotoText>People Count</RobotoText>
                         <StatusView>
                             <Icon name='people-outline' type='MaterialIcons'/>
-                            <View style={{width:10,marginTop:'auto'}}/>
+                            <View style={{width:5,marginTop:'auto'}}/>
                             <RobotoText style={{fontSize:40}}>{this.state.countPeople}</RobotoText>
                         </StatusView>
                     </Card>
