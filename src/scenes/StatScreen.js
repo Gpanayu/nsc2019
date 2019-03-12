@@ -8,7 +8,7 @@ import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import {TouchableOpacity} from 'react-native';
 import axios from 'axios';
 
-const url = "localhost:5000";
+const url = "35.187.253.190:5000";
 class StatScreen extends React.Component {
     constructor(props){
         super(props);

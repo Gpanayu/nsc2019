@@ -19,7 +19,7 @@ const MyCard = styled.View`
     border-radius: 5px;
 `
 
-const url = "localhost:5000";
+const url = "35.187.253.190:5000";
 class HeatMapScreen extends React.Component {
     constructor(props){
         super(props);

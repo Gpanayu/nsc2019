@@ -79,51 +79,48 @@ const PlaceBar = styled.View`
     width: 100%;
     padding: 10px;
 `
-const url = "localhost:5000";
+const url = "35.187.253.190:5000";
 class DashboardScreen extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             showOrdinary: true,
             countPeople: '',
-            status: ''
+            status: '',
+            oriImg: '',
+            heatImg: '',
+            updatedTime: '',
+            date: ''
         }
-        var date = new Date();
-        var hour = date.getHours();
-        var minute = date.getMinutes();
-        // For mocking purpose
-        // if (hour <= 11 && minute > 5){
-        //     hour = 11;
-        // }
-        // else if (hour <= 11  && minute <= 5){
-        //     hour = 11;
-        //     minute = 0;
-        // }
-        // else if(minute < 5){
-        //     hour = hour - 1;
-        //     minute = 60 - (5 - minute);
-        // }
-        // else{
-        //     minute = minute - 5;
-        // }
-        hour = "" + hour;
-        minute = "" + minute;
-        if(hour.length == 1){
-            hour = "0" + hour;
-        }
-        if(minute.length == 1){
-            minute = "0"+ minute;
-        }
-        const query = "" + hour + minute + ".jpg";
         
-        this.date = date
-        this.updatedTime = date.getHours() + ":" + date.getMinutes()
     }
-
-    componentDidMount() {
+    async update(){
         var date = new Date();
         var hour = date.getHours();
         var minute = date.getMinutes();
+        var hour = "" + hour;
+        var minute = "" + minute;
+        if(hour.length == 1){
+            hour = "0" + hour;
+        }
+        if(minute.length == 1){
+            minute = "0"+ minute;
+        }
+        const query = await "" + hour + minute + ".jpg";
+        await this.setState({
+            oriImg : `http://${url}/getNowPicture?time=${query}`,
+            heatImg : `http://${url}/getHeatMap?time=${query}`,
+            updatedTime : date.toLocaleTimeString()
+        })
+        await axios.get(`http://${url}/getHeadcounts?uploaded_filename=${query}`).then((res)=>{
+            this.setState({countPeople : res.data['count'] , status : res.data['density']})
+        });
+    }
+    componentDidMount() {
+        this.update()
+        // var date = new Date();
+        // var hour = date.getHours();
+        // var minute = date.getMinutes();
         // For mocking purpose
         // if (hour <= 11 && minute > 5){
         //     hour = 11;
@@ -139,26 +136,26 @@ class DashboardScreen extends React.Component {
         // else{
         //     minute = minute - 5;
         // }
-        hour = "" + hour;
-        minute = "" + minute;
-        if(hour.length == 1){
-            hour = "0" + hour;
-        }
-        if(minute.length == 1){
-            minute = "0"+ minute;
-        }
-        const query = "" + hour + minute + ".jpg";
+        // hour = "" + hour;
+        // minute = "" + minute;
+        // if(hour.length == 1){
+        //     hour = "0" + hour;
+        // }
+        // if(minute.length == 1){
+        //     minute = "0"+ minute;
+        // }
+        // const query = "" + hour + minute + ".jpg";
         
-        this.date = date
-        this.updatedTime = date.getHours() + ":" + date.getMinutes()
+        // this.date = date
+        // this.updatedTime = date.getHours() + ":" + date.getMinutes()
 
-        this.oriImg = `http://${url}/getNowPicture?time=${query}`
-        this.heatImg = `http://${url}/getHeatMap?time=${query}`
+        // this.oriImg = `http://${url}/getNowPicture?time=${query}`
+        // this.heatImg = `http://${url}/getHeatMap?time=${query}`
 
-        axios.get(`http://${url}/getFivePoints?startTime=${query}`).then((res)=>{
-            keysObj = Object.keys(res.data);
-            this.setState({countPeople : res.data[keysObj[keysObj.length-1]][0] , status : res.data[keysObj[keysObj.length-1]][1]})
-        });
+        // axios.get(`http://${url}/getFivePoints?startTime=${query}`).then((res)=>{
+        //     keysObj = Object.keys(res.data);
+        //     this.setState({countPeople : res.data[keysObj[keysObj.length-1]][0] , status : res.data[keysObj[keysObj.length-1]][1]})
+        // });
         Orientation.addOrientationListener(() => Orientation.lockToPortrait());
     }
 
@@ -179,7 +176,8 @@ class DashboardScreen extends React.Component {
                             <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
                         </View>
                         <Button style={{marginLeft:'auto'}} transparent dark>
-                            <Icon style={{fontSize:30}} onPress={()=>navigate('Stat')} name='graph-trend' type='Foundation'/>
+                            <Icon style={{fontSize:30}} onPress={()=>this.update()} name='refresh' type='Foundation'/>
+                            <Icon style={{fontSize:30}} onPress={()=>navigate('Stat')} name='graph-bar' type='Foundation'/>
                         </Button>
                     </PlaceBar>
                 </Row>
@@ -204,14 +202,14 @@ class DashboardScreen extends React.Component {
                 <Row>
                     <SampleCard>
                         
-                        <StyledImage source={{uri: this.state.showOrdinary ? this.oriImg : this.heatImg}}/>
+                        <StyledImage source={{uri: this.state.showOrdinary ? this.state.oriImg : this.state.heatImg}}/>
                         <ButtonGroup>
                             <Segment>
                                 <Button 
                                     first active={this.state.showOrdinary} 
                                     onPress={()=>{this.setState({showOrdinary:true})}}
                                 >
-                                    <Text>Orinary</Text>
+                                    <Text>Ordinary</Text>
                                 </Button>
                                 <Button 
                                     last active={!this.state.showOrdinary} 
@@ -226,7 +224,7 @@ class DashboardScreen extends React.Component {
                 <Row>
                     <UpdateBar>
                         <RobotoText>Last Update:</RobotoText>
-                        <RobotoText>{this.date.toLocaleTimeString()}</RobotoText>
+                        <RobotoText>{this.state.updatedTime}</RobotoText>
                     </UpdateBar>
                 </Row>
             </Container>
