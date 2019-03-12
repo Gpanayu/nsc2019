@@ -19,6 +19,13 @@ class StatScreen extends React.Component {
     }
     getAxisDomain = () => {
         const data = this.state.plottedData.map(d => d.y);
+        tmpX = [
+            Math.floor(Math.min(...data))-1,
+            Math.ceil(Math.max(...data))+1,
+          ];
+        console.log("test tmp xxxxx");
+        console.log(tmpX);
+        console.log("test tmp xxxxx");
         return [
           Math.floor(Math.min(...data))-1,
           Math.ceil(Math.max(...data))+1,
@@ -102,7 +109,7 @@ class StatScreen extends React.Component {
                             parent: { border: "1px solid #ccc"}
                             }}
                             data={this.state.plottedData}
-                            domain={this.getAxisDomain()}
+                            domain={{y : this.getAxisDomain()}}
                         />
                         </VictoryChart>
                         </CardItem>

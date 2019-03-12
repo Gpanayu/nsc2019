@@ -13,6 +13,7 @@ import StatScreen from './src/scenes/StatScreen';
 import DashboardScreen from './src/scenes/DashboardScene';
 import HeatMapScreen from './src/scenes/HeatMapScreen';
 
+console.disableYellowBox = true; 
 
 const App = createStackNavigator({
   Dashboard: {
