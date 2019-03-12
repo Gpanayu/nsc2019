@@ -14,7 +14,9 @@ class StatScreen extends React.Component {
         super(props);
         this.state = {
             plottedData: [],
-            avg: 0
+            avg: 0,
+            place: this.props.navigation.state.params.place,
+            url: this.props.navigation.state.params.url
         };
     }
     getAxisDomain = () => {
@@ -23,9 +25,6 @@ class StatScreen extends React.Component {
             Math.floor(Math.min(...data))-1,
             Math.ceil(Math.max(...data))+1,
           ];
-        console.log("test tmp xxxxx");
-        console.log(tmpX);
-        console.log("test tmp xxxxx");
         return [
           Math.floor(Math.min(...data))-1,
           Math.ceil(Math.max(...data))+1,
@@ -62,7 +61,7 @@ class StatScreen extends React.Component {
             minute = "0"+ minute;
         }
         var timeNow = hour + minute;
-        axios.get(`http://${url}/getFivePoints?startTime=`+timeNow+".jpg").then((response) => {
+        axios.get(`http://${this.state.url}/getFivePoints?startTime=`+timeNow+".jpg").then((response) => {
             let tmpPlottedData = [];
             let tmpAvg = 0;
             for(let key in response.data){
@@ -94,8 +93,8 @@ class StatScreen extends React.Component {
                             <Left>
                                 <Thumbnail source={require('../asset/pics/logo.png')}/>
                                 <Body>
-                                    <Text>Icanteen</Text>
-                                    <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
+                                    <Text>{this.state.place}</Text>
+                                    {/* <Text note>โรงอาหารวิศวฯจุฬาฯ</Text> */}
                                 </Body>
                             </Left>
                         </CardItem>
@@ -116,7 +115,7 @@ class StatScreen extends React.Component {
                         {
                             this.state.plottedData.map((item, index) => {
                                 return (
-                                    <TouchableOpacity onPress={() => navigate('HeatMap', {time: item.x, amount: item.y})}>
+                                    <TouchableOpacity onPress={() => navigate('HeatMap', {time: item.x, amount: item.y, place: this.state.place, url: this.state.url})}>
                                         <CardItem style = {{backgroundColor:'#e0e0e0'}}>
                                                 <Left style={{flex:1,flexDirection:'row',alignItems:'flex-start',justifyContent:'flex-start'}}>
                                                     {/* <Icon name="md-people" style={{fontSize: 20}}/> */}

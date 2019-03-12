@@ -171,7 +171,7 @@ class DashboardScreen extends React.Component {
                         </View>
                         <Button style={{marginLeft:'auto'}} transparent dark>
                             <Icon style={{fontSize:30}} onPress={()=>this.update()} name='refresh' type='Foundation'/>
-                            <Icon style={{fontSize:30}} onPress={()=>navigate('Stat')} name='graph-bar' type='Foundation'/>
+                            <Icon style={{fontSize:30}} onPress={()=>navigate('Stat', {url: this.state.url, place: this.state.place})} name='graph-bar' type='Foundation'/>
                         </Button>
                     </PlaceBar>
                 </Row>

@@ -27,9 +27,11 @@ class HeatMapScreen extends React.Component {
         const query = time.split(".").join("")+".jpg";
         this.state = {
             showOrdinary: true,
+            place: this.props.navigation.state.params.place,
+            url: this.props.navigation.state.params.url
         };
-        this.oriImg = `http://${url}/getNowPicture?time=${query}`
-        this.heatImg = `http://${url}/getHeatMap?time=${query}`
+        this.oriImg = `http://${this.props.navigation.state.params.url}/getNowPicture?time=${query}`
+        this.heatImg = `http://${this.props.navigation.state.params.url}/getHeatMap?time=${query}`
     }
     render(){
         const {navigate} = this.props.navigation;
@@ -41,8 +43,8 @@ class HeatMapScreen extends React.Component {
                             <Left>
                                 <Thumbnail source={require('../asset/pics/logo.png')}/>
                                 <Body>
-                                    <Text>Icanteen</Text>
-                                    <Text note>โรงอาหารวิศวฯจุฬาฯ</Text>
+                                    <Text>{this.state.place}</Text>
+                                    {/* <Text note>โรงอาหารวิศวฯจุฬาฯ</Text> */}
                                 </Body>
                             </Left>
                         </CardItem>
